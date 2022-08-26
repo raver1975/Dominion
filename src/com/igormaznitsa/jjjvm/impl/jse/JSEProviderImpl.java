@@ -35,6 +35,10 @@ import java.util.*;
  */
 public class JSEProviderImpl implements JJJVMProvider {
 
+  public JSEProviderImpl(boolean flag){
+    classDataLoader=null;
+  }
+
   /**
    * Class loader which loads and provides class byte-code
    */

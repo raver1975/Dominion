@@ -4,15 +4,13 @@ import com.igormaznitsa.jjjvm.impl.JJJVMClassImpl;
 import com.igormaznitsa.jjjvm.impl.jse.JSEProviderImpl;
 import com.igormaznitsa.jjjvm.model.JJJVMClass;
 import com.igormaznitsa.jjjvm.model.JJJVMProvider;
-import com.theokanning.openai.OpenAiService;
-import com.theokanning.openai.completion.CompletionChoice;
-import com.theokanning.openai.completion.CompletionRequest;
-import com.theokanning.openai.engine.Engine;
+//import com.theokanning.openai.OpenAiService;
+//import com.theokanning.openai.completion.CompletionChoice;
+//import com.theokanning.openai.completion.CompletionRequest;
+//import com.theokanning.openai.engine.Engine;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.ByteArrayInputStream;
-import java.util.List;
 
 public class DominionMain {
 
@@ -36,7 +34,7 @@ public class DominionMain {
             System.out.println(cc.getText());
         }
 */
-
+        new JSEProviderImpl(true);
         JFrame frame = new JFrame("Dominion");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -76,10 +74,10 @@ public class DominionMain {
         JPanel outputPanel = new JPanel();
 
         JTextArea output= new JTextArea(25, 45);
-        MessageConsole mc=new MessageConsole(output,true);
+//        MessageConsole mc=new MessageConsole(output,true);
 
-        mc.redirectOut();
-        mc.redirectErr();
+//        mc.redirectOut();
+//        mc.redirectErr();
         outputPanel.add(output);
 
         mainPanel.add(outputPanel);
@@ -87,7 +85,7 @@ public class DominionMain {
         frame.getContentPane().add(mainPanel);
         frame.pack();
         frame.setVisible(true);
-        mc.setMessageLines(output.getRows());
+//        mc.setMessageLines(output.getRows());
 
         new Thread(new Runnable() {
             @Override

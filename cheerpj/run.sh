@@ -1,0 +1,1 @@
+C:/Users/Paul/Documents/Dominion/cheerpj/cheerpjfy.py C:/Users/Paul/Documents/Dominion/out/artifacts/Dominion_jar/Dominion.jar && python3 -m http.server 8080
