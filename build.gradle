@@ -19,6 +19,8 @@ dependencies {
 //    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
 //    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 //    implementation 'com.theokanning.openai-gpt3-java:api:+'
+    implementation group: 'org.codehaus.janino', name: 'janino', version: '3.1.7'
+
 }
 
 test {
@@ -31,4 +33,29 @@ sourceSets {
             srcDirs 'src'
         }
     }
+}
+
+apply plugin: 'java'
+jar {
+    manifest {
+        attributes("Manifest-Version": "1.0",
+                "Main-Class": "com.klemstinegroup.DominionMain");
+    }
+}
+
+task fatJar(type: Jar) {
+    manifest.from jar.manifest
+    classifier = 'all'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+    with jar
+}
+
+artifacts {
+    archives fatJar
 }
