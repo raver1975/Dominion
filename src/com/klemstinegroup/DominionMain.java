@@ -1,5 +1,6 @@
 package com.klemstinegroup;
 
+import com.google.common.reflect.ClassPath;
 import com.igormaznitsa.jjjvm.impl.JJJVMClassImpl;
 import com.igormaznitsa.jjjvm.impl.jse.JSEProviderImpl;
 import com.igormaznitsa.jjjvm.model.JJJVMClass;
@@ -18,6 +19,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -25,7 +27,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.SQLOutput;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 public class DominionMain {
 
@@ -34,6 +39,8 @@ public class DominionMain {
     public static void main(String[] args) {
         System.out.println("Java version:" + System.getProperty("java.class.version"));
         System.setProperty("java.class.version", "50.0");
+
+
         new DominionMain();
     }
 
@@ -92,7 +99,7 @@ public class DominionMain {
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         codePanel.add(codeScroll);
 
-        JButton testButton=new JButton("test");
+        JButton testButton = new JButton("test");
         testButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -120,23 +127,25 @@ public class DominionMain {
                 try {
                     URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://raw.githubusercontent.com/jalian-systems/swingset3/master/SwingSet3.jar")}, ClassLoader.getSystemClassLoader());
                     Thread.currentThread().setContextClassLoader(childClassLoader);
+                    try {
+                        list(childClassLoader);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                     Class<?> clazz = Class.forName("com.sun.swingset3.SwingSet3", true, childClassLoader);
 
-                    for (Field f:clazz.getDeclaredFields()){
-                        System.out.println("field: "+f);
-                    }
-                    for (Method m:clazz.getDeclaredMethods()){
-                        if (m.getName().contains("main"))
-                        System.out.println("method: "+m);
-                    }
-                    System.out.println("here1");
+//                    for (Field f:clazz.getDeclaredFields()){
+//                        System.out.println("field: "+f);
+//                    }
+//                    for (Method m:clazz.getDeclaredMethods()){
+//                        System.out.println("method: "+m);
+//                    }
                     Method main = clazz.getMethod("main", String[].class);
-                    System.out.println("here2");
-                    main.invoke(null,new Object[]{new String[]{}});
-                    System.out.println("here3");
+                    main.invoke(null, new Object[]{new String[]{}});
                 } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
                     ex.printStackTrace();
                 }
+
             }
         });
         mainPanel.add(testButton);
@@ -178,11 +187,11 @@ public class DominionMain {
                         b = temp.get(s);
                     }
                     jjjvmClass = new JJJVMClassImpl(new ByteArrayInputStream(b), provider);
-                    for (String j:jjjvmClass.getAllDeclaredFields().keySet()){
-                        System.out.println("Field: "+j);
+                    for (String j : jjjvmClass.getAllDeclaredFields().keySet()) {
+                        System.out.println("Field: " + j);
                     }
-                    for (String j:jjjvmClass.getAllDeclaredMethods().keySet()){
-                        System.out.println("method: "+j);
+                    for (String j : jjjvmClass.getAllDeclaredMethods().keySet()) {
+                        System.out.println("method: " + j);
                     }
                     jjjvmClass.findMethod("eval0", "()V").invoke(null, null);
                 } catch (Throwable throwable) {
@@ -246,7 +255,44 @@ public class DominionMain {
                         e.printStackTrace();
                     }
                 }
+                printClassPath();
             }
         }).start();
+
+
     }
+
+    private void printClassPath() {
+        System.out.println("-----------------------------------------");
+        ClassLoader myCL = Thread.currentThread().getContextClassLoader();
+        while (myCL != null) {
+            System.out.println("ClassLoader: " + myCL);
+            try {
+                for (Iterator iter = list(myCL); iter.hasNext(); ) {
+                    System.out.println("\t" + iter.next());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            myCL = myCL.getParent();
+        }
+        System.out.println("-----------------------------------------");
+    }
+
+    private static Iterator list(ClassLoader CL) throws IOException {
+        return ClassPath.from(CL).getAllClasses().iterator();
+    }
+    /*private static Iterator list(ClassLoader CL)
+            throws NoSuchFieldException, SecurityException,
+            IllegalArgumentException, IllegalAccessException {
+        Class CL_class = CL.getClass();
+        while (CL_class != java.lang.ClassLoader.class) {
+            CL_class = CL_class.getSuperclass();
+        }
+        java.lang.reflect.Field ClassLoader_classes_field = CL_class
+                .getDeclaredField("classes");
+        ClassLoader_classes_field.setAccessible(true);
+        Vector classes = (Vector) ClassLoader_classes_field.get(CL);
+        return classes.iterator();
+    }*/
 }
