@@ -1,6 +1,6 @@
 package com.klemstinegroup;
 
-import com.google.common.reflect.ClassPath;
+//import com.google.common.reflect.ClassPath;
 import com.igormaznitsa.jjjvm.impl.JJJVMClassImpl;
 import com.igormaznitsa.jjjvm.impl.jse.JSEProviderImpl;
 import com.igormaznitsa.jjjvm.model.JJJVMClass;
@@ -127,11 +127,11 @@ public class DominionMain {
                 try {
                     URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://raw.githubusercontent.com/jalian-systems/swingset3/master/SwingSet3.jar")}, ClassLoader.getSystemClassLoader());
                     Thread.currentThread().setContextClassLoader(childClassLoader);
-                    try {
+                    /*try {
                         list(childClassLoader);
                     } catch (IOException ex) {
                         ex.printStackTrace();
-                    }
+                    }*/
                     Class<?> clazz = Class.forName("com.sun.swingset3.SwingSet3", true, childClassLoader);
 
 //                    for (Field f:clazz.getDeclaredFields()){
@@ -255,14 +255,14 @@ public class DominionMain {
                         e.printStackTrace();
                     }
                 }
-                printClassPath();
+//                printClassPath();
             }
         }).start();
 
 
     }
 
-    private void printClassPath() {
+    /*private void printClassPath() {
         System.out.println("-----------------------------------------");
         ClassLoader myCL = Thread.currentThread().getContextClassLoader();
         while (myCL != null) {
@@ -277,11 +277,11 @@ public class DominionMain {
             myCL = myCL.getParent();
         }
         System.out.println("-----------------------------------------");
-    }
+    }*/
 
-    private static Iterator list(ClassLoader CL) throws IOException {
+    /*private static Iterator list(ClassLoader CL) throws IOException {
         return ClassPath.from(CL).getAllClasses().iterator();
-    }
+    }*/
     /*private static Iterator list(ClassLoader CL)
             throws NoSuchFieldException, SecurityException,
             IllegalArgumentException, IllegalAccessException {
