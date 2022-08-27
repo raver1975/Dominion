@@ -1,1 +1,1 @@
-C:/Users/Paul/Documents/Dominion/cheerpj/cheerpjfy.py C:/Users/Paul/Documents/Dominion/build/libs/Dominion-1.0-SNAPSHOT-all.jar && echo "ready..."&& python3 -m http.server 8081
+C:/Users/Paul/Documents/Dominion/cheerpj/cheerpjfy.py -j 6 C:/Users/Paul/Documents/Dominion/build/libs/Dominion-1.0-SNAPSHOT-all.jar && echo "ready..."&& python3 -m http.server 8081
