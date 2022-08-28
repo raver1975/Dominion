@@ -6,9 +6,11 @@ import com.igormaznitsa.jjjvm.impl.jse.JSEProviderImpl;
 import com.igormaznitsa.jjjvm.model.JJJVMClass;
 import com.igormaznitsa.jjjvm.model.JJJVMField;
 import com.igormaznitsa.jjjvm.model.JJJVMProvider;
-import io.ipfs.api.IPFS;
-import io.ipfs.api.MerkleNode;
-import io.ipfs.api.NamedStreamable;
+
+//ipfs
+//import io.ipfs.api.IPFS;
+//import io.ipfs.api.MerkleNode;
+//import io.ipfs.api.NamedStreamable;
 import org.codehaus.commons.compiler.CompileException;
 import org.codehaus.janino.ScriptEvaluator;
 //import org.xeustechnologies.jcl.JarClassLoader;
@@ -44,10 +46,7 @@ public class DominionMain {
         System.out.println("Java version:" + System.getProperty("java.class.version"));
         System.setProperty("java.class.version", "50.0");
 
-//        https://ipfs.io/api/v0/add
-//        IPFS ipfs = new IPFS("/dnsaddr/ipfs.io/tcp/5001/https");
-//        IPFS ipfs = new IPFS("/dnsaddr/ipfs.infura.io/tcp/5001/https");
-        IPFS ipfs = new IPFS("/ip4/127.0.0.1/tcp/5001");
+        /*IPFS ipfs = new IPFS("/ip4/127.0.0.1/tcp/5001");
         try {
             NamedStreamable.InputStreamWrapper is = new NamedStreamable.InputStreamWrapper(new ByteArrayInputStream("Hello World".getBytes()));
             MerkleNode response = ipfs.add(is).get(0);
@@ -55,7 +54,7 @@ public class DominionMain {
 
         } catch (IOException ex) {
             throw new RuntimeException("Error whilst communicating with the IPFS node", ex);
-        }
+        }*/
 
         new DominionMain();
     }

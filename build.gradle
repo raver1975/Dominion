@@ -26,8 +26,8 @@ dependencies {
 //    implementation 'org.xeustechnologies:jcl-core:2.8'
   //  implementation("com.google.guava:guava:31.1-jre")
 
-    implementation 'com.github.ipfs:java-ipfs-http-client:+'
-
+//    implementation 'com.github.ipfs:java-ipfs-http-client:+'
+//  cors
 
 }
 
