@@ -7,7 +7,9 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
+
 
 dependencies {
 //    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -23,6 +25,8 @@ dependencies {
 //    implementation 'org.xeustechnologies:jcl:2.8'
 //    implementation 'org.xeustechnologies:jcl-core:2.8'
   //  implementation("com.google.guava:guava:31.1-jre")
+
+    implementation 'com.github.ipfs:java-ipfs-http-client:+'
 
 
 }
