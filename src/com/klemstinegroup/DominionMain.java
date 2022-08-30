@@ -24,9 +24,7 @@ import org.codehaus.janino.ScriptEvaluator;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -34,6 +32,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.sql.SQLOutput;
 import java.util.*;
 
@@ -61,6 +60,32 @@ public class DominionMain {
         Global.jsCallS("uploadIPFS", base64);
         System.out.println(test+" uploading");
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String tes="QmeLeffpwNgyknWhgQRToBqN7w1RQHxoQkdCakGBN27yzi";
+                Global.jsCallS("downloadIPFS", tes);
+                while(true){
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+//                        FileReader f = new FileReader("/str/"+tes);
+                        byte[] byt = Files.readAllBytes(new File("/str/" + tes).toPath());
+                        byte[] decoded=Base64.getDecoder().decode(byt);
+                        System.out.println("p---------"+new String(decoded));
+                        break;
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
         new DominionMain();
     }
