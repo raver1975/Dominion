@@ -44,7 +44,7 @@ public class DominionMain {
 
     public static void main(String[] args) {
         System.out.println("Java version:" + System.getProperty("java.class.version"));
-        System.setProperty("java.class.version", "50.0");
+        System.setProperty("java.class.version", "1.0");
 
         /*IPFS ipfs = new IPFS("/ip4/127.0.0.1/tcp/5001");
         try {
@@ -310,4 +310,6 @@ public class DominionMain {
         Vector classes = (Vector) ClassLoader_classes_field.get(CL);
         return classes.iterator();
     }*/
+
+
 }
