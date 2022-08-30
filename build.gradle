@@ -29,8 +29,9 @@ dependencies {
 //    implementation 'com.github.ipfs:java-ipfs-http-client:+'
 //  cors
 
-    implementation(files("libs/cheerpj-dom.jar"))
+//    implementation(files("libs/cheerpj-dom.jar"))
 
+    implementation fileTree(dir: 'libs', include: '*.jar')
 
 }
 
