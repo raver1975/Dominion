@@ -64,6 +64,8 @@
                         }, 200);
                     }
 
+                }).catch(e => {
+                    console.log(e);
                 });
             }
 
@@ -75,7 +77,9 @@
                         run(cid1);
                     }, 1000);
                 } else {
-                    window.node.pin.add(cid1).then();
+                    window.node.pin.add(cid1).then().catch(e => {
+                        console.log(e);
+                    });
                     ggg(cid1, window.node.cat(cid1), new Uint8Array());
                 }
             };
@@ -95,7 +99,11 @@
             } else {
                 window.node.add(byteArray).then(function (fileAdded) {
                     console.log('Added file:', fileAdded.path);
-                    window.node.pin.add(fileAdded.path).then();
+                    window.node.pin.add(fileAdded.path).then().catch(e => {
+                        console.log(e);
+                    });
+                }).catch(e => {
+                    console.log(e);
                 });
             }
         };
@@ -109,10 +117,6 @@
     cheerpjInit({javaProperties: ["java.protocol.handler.pkgs=com.leaningtech.handlers"], clipboardMode: "system"});
     cheerpjCreateDisplay(w, h);
     cheerpjRunJar("/app/Dominion-1.0-SNAPSHOT-all.jar");
-</script>
-
-
-<script type="text/javascript">
     document.addEventListener('DOMContentLoaded', async () => {
         const ipfs = await Ipfs.create({
             repo: 'ipfs-' + Math.random(),

@@ -63,17 +63,25 @@ public class DominionMain {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String tes="QmeLeffpwNgyknWhgQRToBqN7w1RQHxoQkdCakGBN27yzi";
-                Global.jsCallS("downloadIPFS", tes);
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                String cid="QmeLeffpwNgyknWhgQRToBqN7w1RQHxoQkdCakGBN27yzi";
+                System.out.println("attempting to get ipfs:"+cid);
+                Global.jsCallS("downloadIPFS", cid);
                 while(true){
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
+                    System.out.println("decoding cid:"+cid);
                     try {
 //                        FileReader f = new FileReader("/str/"+tes);
-                        byte[] byt = Files.readAllBytes(new File("/str/" + tes).toPath());
+                        byte[] byt = Files.readAllBytes(new File("/str/" + cid).toPath());
                         byte[] decoded=Base64.getDecoder().decode(byt);
                         System.out.println("p---------"+new String(decoded));
                         break;
@@ -85,7 +93,7 @@ public class DominionMain {
                     }
                 }
             }
-        });
+        }).start();
 
         new DominionMain();
     }
