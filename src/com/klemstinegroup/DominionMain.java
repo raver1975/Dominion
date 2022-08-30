@@ -11,6 +11,7 @@ import com.igormaznitsa.jjjvm.model.JJJVMProvider;
 //import io.ipfs.api.IPFS;
 //import io.ipfs.api.MerkleNode;
 //import io.ipfs.api.NamedStreamable;
+import com.leaningtech.client.Global;
 import org.codehaus.commons.compiler.CompileException;
 import org.codehaus.janino.ScriptEvaluator;
 //import org.xeustechnologies.jcl.JarClassLoader;
@@ -32,11 +33,9 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLOutput;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 public class DominionMain {
 
@@ -55,6 +54,13 @@ public class DominionMain {
         } catch (IOException ex) {
             throw new RuntimeException("Error whilst communicating with the IPFS node", ex);
         }*/
+
+        String test="Hello world44";
+        System.out.println("sending "+test+"to IPFS");
+        String base64= Arrays.toString(Base64.getEncoder().encode(test.getBytes(StandardCharsets.UTF_8)));
+       Global.jsCallS("uploadIPFS", base64);
+        System.out.println(test+" uploading");
+
 
         new DominionMain();
     }

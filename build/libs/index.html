@@ -65,14 +65,14 @@
           dataArr = null;
           return ret;
         }
-        function ggg(cat,chunks){
+        function ggg(cid,cat,chunks){
           cat.next().then(function(chunk){
             if (chunk.done){
               const bytesString = String.fromCharCode(...chunks)
               console.log(chunks);
-              console.log(bytesString);
+              console.log("/str/"+cid+"\t"+bytesString);
               delete chunks;
-              return chunks;
+              cheerpjAddStringFile("/str/"+cid, toBase64(chunks));
               // self.@com.klemstinegroup.sunshineblue.client.NativeGWT::finishDownload(Ljava/lang/String;I)(toBase64(chunks),iii);
             }
             else{
@@ -80,7 +80,7 @@
               var c=new Uint8Array(chunks.length +chunv.length);
               c.set(chunks);
               c.set(chunv,chunks.length);
-              setTimeout(function(){ggg(cat,c);},200);
+              setTimeout(function(){ggg(cid,cat,c);},200);
             }
 
           });
@@ -95,7 +95,7 @@
 
           else{
             window.node.pin.add(cid1).then();
-            ggg(window.node.cat(cid1),new Uint8Array());
+            ggg(cid1,window.node.cat(cid1),new Uint8Array());
           }
         };
         run(cid);
