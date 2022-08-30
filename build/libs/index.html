@@ -86,6 +86,32 @@
             run(cid);
         }
 
+        function uploadFile(filename) {
+            console.log("uploading file: "+filename);
+            fetch(filename)
+                .then(res => res.blob()) // Gets the response and returns it as a blob
+                .then(blob => {
+                    // Here's where you get access to the blob
+                    // And you can use it for whatever you want
+                    // Like calling ref().put(blob)
+
+                    var reader = new FileReader();
+                    reader.readAsDataURL(blob);
+
+                    reader.onload = function () {
+                        console.log(reader.result);
+                        var dataUrl = reader.result;
+                        var base64 = dataUrl.split(',')[1];
+                        uploadIPFS(base64);
+                    };
+                    reader.onerror = function (error) {
+                        console.log('Error: ', error);
+                    };
+                });
+
+
+
+        }
 
         function uploadIPFS(base64) {
             var byteCharacters = atob(base64);
@@ -114,7 +140,7 @@
 <script>
     var w = window.innerWidth - 20;
     var h = window.innerHeight - 20;
-    cheerpjInit({javaProperties: ["java.protocol.handler.pkgs=com.leaningtech.handlers"], clipboardMode: "system"});
+    cheerpjInit({javaProperties: ["java.protocol.handler.pkgs=com.leaningtech.handlers"], clipboardMode: "system",status:"default"});
     cheerpjCreateDisplay(w, h);
     cheerpjRunJar("/app/Dominion-1.0-SNAPSHOT-all.jar");
     document.addEventListener('DOMContentLoaded', async () => {
@@ -127,6 +153,12 @@
 
         uploadIPFS("SGVsbG8gV29ybGQ=");
         downloadIPFS("QmeLeffpwNgyknWhgQRToBqN7w1RQHxoQkdCakGBN27yzi");
+
+        uploadFile("/Dominion-1.0.SNAPSHOT-all.jar");
+        uploadFile("/Dominion-1.0.SNAPSHOT-all.jar.js");
+        uploadFile("/index.html");
+
+
         console.log(`Node status: ${status}`)
     })
 </script>
