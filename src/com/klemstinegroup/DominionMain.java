@@ -57,8 +57,8 @@ public class DominionMain {
 
         String test="Hello world44";
         System.out.println("sending "+test+"to IPFS");
-        String base64= Arrays.toString(Base64.getEncoder().encode(test.getBytes(StandardCharsets.UTF_8)));
-       Global.jsCallS("uploadIPFS", base64);
+        String base64= Base64.getEncoder().encodeToString(test.getBytes());
+        Global.jsCallS("uploadIPFS", base64);
         System.out.println(test+" uploading");
 
 
