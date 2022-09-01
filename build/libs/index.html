@@ -86,6 +86,13 @@
             run(cid);
         }
 
+        function uploadCallBack(filename,cid){
+
+        }
+        function callFunction(func) {
+            func();
+        }
+
         function uploadFile(filename) {
             console.log("uploading file: "+filename);
             fetch(filename)
