@@ -51,8 +51,10 @@
                         const bytesString = String.fromCharCode(...chunks)
                         console.log(chunks);
                         console.log("/str/" + cid + "\t" + bytesString);
-                        delete chunks;
                         cheerpjAddStringFile("/str/" + cid, toBase64(chunks));
+                        // var javaByteArray = cjTypedArrayToJava(chunks);
+                        // cjCall("com.klemstinegroup.DominionMain", "recieveFromIPFS", cjTypedArrayToJava(chunks));
+                        delete chunks;
                         // self.@com.klemstinegroup.sunshineblue.client.NativeGWT::finishDownload(Ljava/lang/String;I)(toBase64(chunks),iii);
                     } else {
                         var chunv = chunk.value;
@@ -109,7 +111,7 @@
                         console.log(reader.result);
                         var dataUrl = reader.result;
                         var base64 = dataUrl.split(',')[1];
-                        uploadIPFS(base64);
+                        uploadIPFS(filename,base64);
                     };
                     reader.onerror = function (error) {
                         console.log('Error: ', error);
@@ -120,7 +122,7 @@
 
         }
 
-        function uploadIPFS(base64) {
+        function uploadIPFS(title,base64) {
             var byteCharacters = atob(base64);
             var byteNumbers = new Array(byteCharacters.length);
             for (var i = 0; i < byteCharacters.length; i++) {
@@ -131,7 +133,7 @@
                 console.log("Node not running!");
             } else {
                 window.node.add(byteArray).then(function (fileAdded) {
-                    console.log('Added file:', fileAdded.path);
+                    console.log('Added file:', title+" https://ipfs.io/ipfs/"+fileAdded.path);
                     window.node.pin.add(fileAdded.path).then().catch(e => {
                         console.log(e);
                     });
@@ -158,12 +160,14 @@
 
         const status = ipfs.isOnline() ? 'online' : 'offline'
 
-        uploadIPFS("SGVsbG8gV29ybGQ=");
-        downloadIPFS("QmeLeffpwNgyknWhgQRToBqN7w1RQHxoQkdCakGBN27yzi");
+        // uploadIPFS("SGVsbG8gV29ybGQ=");
+        // downloadIPFS("QmeLeffpwNgyknWhgQRToBqN7w1RQHxoQkdCakGBN27yzi");
 
-        uploadFile("/Dominion-1.0.SNAPSHOT-all.jar");
-        uploadFile("/Dominion-1.0.SNAPSHOT-all.jar.js");
-        uploadFile("/index.html");
+        // uploadFile("/Dominion-1.0.SNAPSHOT-all.jar");
+        // uploadFile("/Dominion-1.0.SNAPSHOT-all.jar.js");
+        // uploadFile("/index.html");
+
+        uploadFile(window.location.href);
 
 
         console.log(`Node status: ${status}`)
