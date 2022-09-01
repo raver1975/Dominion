@@ -1,6 +1,7 @@
 package com.klemstinegroup;
 
 //import com.google.common.reflect.ClassPath;
+
 import com.igormaznitsa.jjjvm.impl.JJJVMClassImpl;
 import com.igormaznitsa.jjjvm.impl.jse.JSEProviderImpl;
 import com.igormaznitsa.jjjvm.model.JJJVMClass;
@@ -54,11 +55,11 @@ public class DominionMain {
             throw new RuntimeException("Error whilst communicating with the IPFS node", ex);
         }*/
 
-        String test="Hello world44";
-        System.out.println("sending "+test+"to IPFS");
-        String base64= Base64.getEncoder().encodeToString(test.getBytes());
-        Global.jsCallS("uploadIPFS", base64);
-        System.out.println(test+" uploading");
+        String test = "Hello world44";
+        System.out.println("sending " + test + "to IPFS");
+        String base64 = Base64.getEncoder().encodeToString(test.getBytes());
+        Global.jsCallS("uploadIPFS", test, base64);
+        System.out.println(test + " uploading");
 
         new Thread(new Runnable() {
             @Override
@@ -68,22 +69,22 @@ public class DominionMain {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                String cid="QmeLeffpwNgyknWhgQRToBqN7w1RQHxoQkdCakGBN27yzi";
-                System.out.println("attempting to get ipfs:"+cid);
+                String cid = "QmeLeffpwNgyknWhgQRToBqN7w1RQHxoQkdCakGBN27yzi";
+                System.out.println("attempting to get ipfs:" + cid);
                 Global.jsCallS("downloadIPFS", cid);
-                while(true){
+                while (true) {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
-                    System.out.println("decoding cid:"+cid);
+                    System.out.println("decoding cid:" + cid);
                     try {
 //                        FileReader f = new FileReader("/str/"+tes);
                         byte[] byt = Files.readAllBytes(new File("/str/" + cid).toPath());
-                        byte[] decoded=Base64.getDecoder().decode(byt);
-                        System.out.println("p---------"+new String(decoded));
+                        byte[] decoded = Base64.getDecoder().decode(byt);
+                        System.out.println("p---------" + new String(decoded));
                         break;
 
                     } catch (FileNotFoundException e) {
@@ -352,3 +353,4 @@ public class DominionMain {
 
 
 }
+
