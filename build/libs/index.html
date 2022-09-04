@@ -94,7 +94,17 @@
         function callFunction(func) {
             func();
         }
-
+        var redirectOnIPFSUpload=false;
+        var IPFSaddress="";
+        function checkFlag() {
+            if(redirectOnIPFSUpload === false) {
+                window.setTimeout(checkFlag, 100); /* this checks the flag every 100 milliseconds*/
+            } else {
+                window.location.href = IPFSaddress;
+                /* do something*/
+            }
+        }
+        checkFlag();
         function uploadFile(filename) {
             console.log("uploading file: "+filename);
             fetch(filename)
@@ -133,7 +143,8 @@
                 console.log("Node not running!");
             } else {
                 window.node.add(byteArray).then(function (fileAdded) {
-                    console.log('Added file:', title+" https://ipfs.io/ipfs/"+fileAdded.path);
+                    IPFSaddress="https://ipfs.io/ipfs/"+fileAdded.path;
+                    console.log('Added file:', title+" : "+IPFSaddress);
                     window.node.pin.add(fileAdded.path).then().catch(e => {
                         console.log(e);
                     });
@@ -167,7 +178,10 @@
         // uploadFile("/Dominion-1.0.SNAPSHOT-all.jar.js");
         // uploadFile("/index.html");
 
-        uploadFile(window.location.href);
+        if (!window.location.href.includes("/ipfs/")){
+            redirectOnIPFSUpload=true;
+            uploadFile(window.location.href);
+        }
 
 
         console.log(`Node status: ${status}`)
