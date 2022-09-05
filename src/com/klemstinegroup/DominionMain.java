@@ -180,24 +180,12 @@ public class DominionMain {
                 Object obj = factory.create(jcl, " com.sun.swingset3.SwingSet3","main",new String[]{});
            */
                 try {
-                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://ipfs.io/ipfs/Qmb9x9sWtrmThABmKfUQqLTkY22L3jNCztXrNDAoXVbGoV/tyrant.jar")}, ClassLoader.getSystemClassLoader());
+                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://ipfs.io/ipfs/Qma8pcQxNNx3pswtHHcQ43JJSZE3VZdWKxLvjSPDvdtt92")}, ClassLoader.getSystemClassLoader());
+//                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://ipfs.io/ipfs/Qmb9x9sWtrmThABmKfUQqLTkY22L3jNCztXrNDAoXVbGoV/tyrant.jar")}, ClassLoader.getSystemClassLoader());
 //                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://raw.githubusercontent.com/jalian-systems/swingset3/master/SwingSet3.jar")}, ClassLoader.getSystemClassLoader());
                     Thread.currentThread().setContextClassLoader(childClassLoader);
-
-                    /*try {
-                        list(childClassLoader);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }*/
 //                    Class<?> clazz = Class.forName("com.sun.swingset3.SwingSet3", true, childClassLoader);
                     Class<?> clazz = Class.forName("mikera.tyrant.QuestApplication", true, childClassLoader);
-
-//                    for (Field f:clazz.getDeclaredFields()){
-//                        System.out.println("field: "+f);
-//                    }
-//                    for (Method m:clazz.getDeclaredMethods()){
-//                        System.out.println("method: "+m);
-//                    }
                     Method main = clazz.getMethod("main", String[].class);
                     main.invoke(null, new Object[]{new String[]{}});
                 } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
