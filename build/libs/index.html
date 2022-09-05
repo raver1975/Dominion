@@ -233,8 +233,7 @@
                                                             content: u_atob(base64_js)
                                                         }];
                                                         const options = {
-                                                            wrapWithDirectory: true,
-                                                            progress: (prog, filepath) => console.log(`received: ` + prog)
+                                                            wrapWithDirectory: true
                                                         }
 
                                                         async function f1() {
@@ -261,8 +260,39 @@
 
         // uploadFile("./Dominion-1.0-SNAPSHOT-all.jar");
         // uploadFile("./Dominion-1.0-SNAPSHOT-all.jar.js");
-        // uploadFile("./index.html");
+        //  uploadFile("./tyrant.jar");
+        fetch("tyrant.jar")
+            .then(res => res.blob()) // Gets the response and returns it as a blob
+            .then(blob => {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(blob);
 
+                    reader.onload = function () {
+                        console.log(reader);
+                        var dataUrl = reader.result;
+                        var base64 = dataUrl.split(',')[1];
+                        const fileDetails = [{
+                            path: '/tyrant.jar',
+                            content: u_atob(base64)
+                        }];
+                        const options = {
+                            wrapWithDirectory: true
+                        }
+
+                        async function f1() {
+                            for await (let value of window.node.addAll(fileDetails, options)) {
+                                console.log(value.path + " : https://ipfs.io/ipfs/" + value.cid.toString()); // 1, then 2, then 3, then 4, then 5 (with delay between)
+                            }
+                        }
+
+                        f1();
+
+                        reader.onerror = function (error) {
+                            console.log('Error: ', error);
+                        };
+                    }
+                }
+            );
         /*if (!window.location.href.includes("/ipfs/")){
             redirectOnIPFSUpload=true;
             uploadFile(window.location.href);

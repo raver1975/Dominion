@@ -180,14 +180,16 @@ public class DominionMain {
                 Object obj = factory.create(jcl, " com.sun.swingset3.SwingSet3","main",new String[]{});
            */
                 try {
-                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://raw.githubusercontent.com/jalian-systems/swingset3/master/SwingSet3.jar")}, ClassLoader.getSystemClassLoader());
+                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://ipfs.io/ipfs/Qmb9x9sWtrmThABmKfUQqLTkY22L3jNCztXrNDAoXVbGoV/tyrant.jar")}, ClassLoader.getSystemClassLoader());
+//                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://raw.githubusercontent.com/jalian-systems/swingset3/master/SwingSet3.jar")}, ClassLoader.getSystemClassLoader());
                     Thread.currentThread().setContextClassLoader(childClassLoader);
                     /*try {
                         list(childClassLoader);
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }*/
-                    Class<?> clazz = Class.forName("com.sun.swingset3.SwingSet3", true, childClassLoader);
+//                    Class<?> clazz = Class.forName("com.sun.swingset3.SwingSet3", true, childClassLoader);
+                    Class<?> clazz = Class.forName("mikera.tyrant.QuestApplication", true, childClassLoader);
 
 //                    for (Field f:clazz.getDeclaredFields()){
 //                        System.out.println("field: "+f);
