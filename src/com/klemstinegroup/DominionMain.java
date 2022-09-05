@@ -183,6 +183,7 @@ public class DominionMain {
                     URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://ipfs.io/ipfs/Qmb9x9sWtrmThABmKfUQqLTkY22L3jNCztXrNDAoXVbGoV/tyrant.jar")}, ClassLoader.getSystemClassLoader());
 //                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://raw.githubusercontent.com/jalian-systems/swingset3/master/SwingSet3.jar")}, ClassLoader.getSystemClassLoader());
                     Thread.currentThread().setContextClassLoader(childClassLoader);
+
                     /*try {
                         list(childClassLoader);
                     } catch (IOException ex) {
