@@ -2,12 +2,6 @@ package com.klemstinegroup;
 
 //import com.google.common.reflect.ClassPath;
 
-import com.igormaznitsa.jjjvm.impl.JJJVMClassImpl;
-import com.igormaznitsa.jjjvm.impl.jse.JSEProviderImpl;
-import com.igormaznitsa.jjjvm.model.JJJVMClass;
-import com.igormaznitsa.jjjvm.model.JJJVMField;
-import com.igormaznitsa.jjjvm.model.JJJVMProvider;
-
 //ipfs
 //import io.ipfs.api.IPFS;
 //import io.ipfs.api.MerkleNode;
@@ -38,8 +32,6 @@ import java.sql.SQLOutput;
 import java.util.*;
 
 public class DominionMain {
-
-    private final JSEProviderImpl provider;
 
     public static void main(String[] args) {
         System.out.println("Java version:" + System.getProperty("java.class.version"));
@@ -101,7 +93,7 @@ public class DominionMain {
 
     public DominionMain() {
 
-        provider = new JSEProviderImpl();
+//        provider = new JSEProviderImpl();
 /*
        OpenAiService service = new OpenAiService("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");
 //        Engine engine = service.getEngine("code-davinci-002");
@@ -117,7 +109,7 @@ public class DominionMain {
             System.out.println(cc.getText());
         }
 */
-        new JSEProviderImpl(true);
+//        new JSEProviderImpl(true);
         JFrame frame = new JFrame("Dominion");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -155,10 +147,10 @@ public class DominionMain {
         codePanel.add(codeScroll);
 
         JButton testButton = new JButton("Jar");
-        JPanel openjarpanel=new JPanel();
-        JTextField jarField=new JTextField("https://ipfs.io/ipfs/Qma8pcQxNNx3pswtHHcQ43JJSZE3VZdWKxLvjSPDvdtt92");
-        JTextField classField=new JTextField("mikera.tyrant.QuestApplication");
-        if (Math.random()>.5f){
+        JPanel openjarpanel = new JPanel();
+        JTextField jarField = new JTextField("https://ipfs.io/ipfs/Qma8pcQxNNx3pswtHHcQ43JJSZE3VZdWKxLvjSPDvdtt92");
+        JTextField classField = new JTextField("mikera.tyrant.QuestApplication");
+        if (Math.random() > .5f) {
             jarField.setText("https://ipfs.io/ipfs/QmcsrXUQoWf3E979sTvJF7KKM6AzEX7Jr8q9W5t9dDU43B");
             classField.setText("ImageEditor");
         }
@@ -208,36 +200,40 @@ public class DominionMain {
         mainPanel.add(openjarpanel);
 
 
-
-
         mainPanel.add(codePanel);
         JButton compileButton = new JButton("Compile and Run Code");
         compileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("compile started!");
                 ScriptEvaluator se = new ScriptEvaluator();
                 se.setTargetVersion(6);
-                System.out.println("cooking");
 
                 try {
                     se.cook(
                             code.getText()
                     );
-                    System.out.println("cooked - evaluating");
-
                 } catch (CompileException ex) {
                     ex.printStackTrace();
                 }
+                Map<String, byte[]> temp = se.getBytecodes();
+                byte[] b1 = new byte[0];
 
-                //Janino evaluation here:::
-                /*try {
-                    se.evaluate(null);
-                } catch (InvocationTargetException ex) {
+                for (String s : temp.keySet()) {
+                    System.out.println("Compiled:"+s);
+                    b1 = temp.get(s);
+                }
+                JavaClassLoader jcl = new JavaClassLoader(b1);
+                Class regeneratedClass = null;
+                try {
+                    regeneratedClass = jcl.findClass("SC");
+                    Method method2=regeneratedClass.getMethod("eval0");
+                    method2.invoke(null);
+                } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
                     ex.printStackTrace();
-                    System.out.println("evaluated");
-                }*/
+                }
 
+
+/*
                 //JJJVM evaluation
                 JJJVMClassImpl jjjvmClass = null;
                 byte[] b = new byte[0];
@@ -258,6 +254,7 @@ public class DominionMain {
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }
+*/
 
 
             }
@@ -277,7 +274,7 @@ public class DominionMain {
 
         mainPanel.add(outputPanel);
 
-        JButton clearOutputButton=new JButton("Clear");
+        JButton clearOutputButton = new JButton("Clear");
         clearOutputButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
