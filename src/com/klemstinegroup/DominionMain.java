@@ -6,6 +6,7 @@ package com.klemstinegroup;
 //import io.ipfs.api.IPFS;
 //import io.ipfs.api.MerkleNode;
 //import io.ipfs.api.NamedStreamable;
+
 import com.leaningtech.client.Global;
 import org.codehaus.commons.compiler.CompileException;
 import org.codehaus.janino.ScriptEvaluator;
@@ -206,12 +207,12 @@ public class DominionMain {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ScriptEvaluator se = new ScriptEvaluator();
+                String title=("SC"+1f/Math.random()).replace('.','0');
+                se.setClassName(title);
                 se.setTargetVersion(6);
 
                 try {
-                    se.cook(
-                            code.getText()
-                    );
+                    se.cook(code.getText());
                 } catch (CompileException ex) {
                     ex.printStackTrace();
                 }
@@ -219,14 +220,14 @@ public class DominionMain {
                 byte[] b1 = new byte[0];
 
                 for (String s : temp.keySet()) {
-                    System.out.println("Compiled:"+s);
+                    System.out.println("Compiled:" + s);
                     b1 = temp.get(s);
                 }
                 JavaClassLoader jcl = new JavaClassLoader(b1);
                 Class regeneratedClass = null;
                 try {
-                    regeneratedClass = jcl.findClass("SC");
-                    Method method2=regeneratedClass.getMethod("eval0");
+                    regeneratedClass = jcl.findClass(title);
+                    Method method2 = regeneratedClass.getMethod("eval0");
                     method2.invoke(null);
                 } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
                     ex.printStackTrace();
