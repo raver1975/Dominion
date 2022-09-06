@@ -154,7 +154,17 @@ public class DominionMain {
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         codePanel.add(codeScroll);
 
-        JButton testButton = new JButton("test");
+        JButton testButton = new JButton("Jar");
+        JPanel openjarpanel=new JPanel();
+        JTextField jarField=new JTextField("https://ipfs.io/ipfs/Qma8pcQxNNx3pswtHHcQ43JJSZE3VZdWKxLvjSPDvdtt92");
+        JTextField classField=new JTextField("mikera.tyrant.QuestApplication");
+        if (Math.random()>.5f){
+            jarField.setText("https://ipfs.io/ipfs/QmcsrXUQoWf3E979sTvJF7KKM6AzEX7Jr8q9W5t9dDU43B");
+            classField.setText("ImageEditor");
+        }
+        openjarpanel.add(jarField);
+        openjarpanel.add(classField);
+        openjarpanel.add(testButton);
         testButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -180,12 +190,12 @@ public class DominionMain {
                 Object obj = factory.create(jcl, " com.sun.swingset3.SwingSet3","main",new String[]{});
            */
                 try {
-                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://ipfs.io/ipfs/Qma8pcQxNNx3pswtHHcQ43JJSZE3VZdWKxLvjSPDvdtt92")}, ClassLoader.getSystemClassLoader());
+                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL(jarField.getText())}, ClassLoader.getSystemClassLoader());
 //                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://ipfs.io/ipfs/Qmb9x9sWtrmThABmKfUQqLTkY22L3jNCztXrNDAoXVbGoV/tyrant.jar")}, ClassLoader.getSystemClassLoader());
 //                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://raw.githubusercontent.com/jalian-systems/swingset3/master/SwingSet3.jar")}, ClassLoader.getSystemClassLoader());
                     Thread.currentThread().setContextClassLoader(childClassLoader);
 //                    Class<?> clazz = Class.forName("com.sun.swingset3.SwingSet3", true, childClassLoader);
-                    Class<?> clazz = Class.forName("mikera.tyrant.QuestApplication", true, childClassLoader);
+                    Class<?> clazz = Class.forName(classField.getText(), true, childClassLoader);
                     Method main = clazz.getMethod("main", String[].class);
                     main.invoke(null, new Object[]{new String[]{}});
                 } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
@@ -194,9 +204,14 @@ public class DominionMain {
 
             }
         });
-        mainPanel.add(testButton);
 
-        JButton compileButton = new JButton("Compile");
+        mainPanel.add(openjarpanel);
+
+
+
+
+        mainPanel.add(codePanel);
+        JButton compileButton = new JButton("Compile and Run Code");
         compileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -249,9 +264,6 @@ public class DominionMain {
         });
         mainPanel.add(compileButton);
 
-
-        mainPanel.add(codePanel);
-
         JPanel outputPanel = new JPanel();
 
         JTextArea output = new JTextArea(25, 45);
@@ -265,6 +277,14 @@ public class DominionMain {
 
         mainPanel.add(outputPanel);
 
+        JButton clearOutputButton=new JButton("Clear");
+        clearOutputButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                output.setText("");
+            }
+        });
+        mainPanel.add(clearOutputButton);
         frame.getContentPane().add(mainPanel);
         frame.pack();
         frame.setVisible(true);
