@@ -136,6 +136,48 @@
 
         }
 
+        function u_atob(ascii) {
+            return Uint8Array.from(atob(ascii), c => c.charCodeAt(0));
+        }
+
+        function uploadDirectory(urls, directory) {
+            var list = [];
+            var results = [];
+
+
+            urls.forEach(function (url, i) { // (1)
+                list.push( // (2)
+                    fetch(url).then(res => res.blob()).then(blob1 => {
+                        results[i]=blob1;
+                        }
+                    ))
+                ;
+            });
+
+            Promise.all(list) // (4)
+                .then(function () {
+                    console.log('all requests finished!'); // (5)
+                    var fileDetails = [];
+                    for (var i = 0; i < urls.length; i++) {
+                        fileDetails.push({
+                            path: directory[i],
+                            content: results[i]
+                        });
+                    }
+                    console.log(fileDetails);
+
+                    async function f1() {
+                        for await (let value of window.node.addAll(fileDetails, {
+                            wrapWithDirectory: true
+                        })) {
+                            console.log(value.path + " : https://ipfs.io/ipfs/" + value.cid.toString());
+                        }
+                    }
+
+                    f1();
+                });
+        }
+
         function uploadIPFS(title, base64) {
             var byteCharacters = atob(base64);
             var byteNumbers = new Array(byteCharacters.length);
@@ -192,70 +234,10 @@
         var root = location.protocol + '//' + location.host + window.location.pathname;
         console.log("root:" + root)
 
-        function u_atob(ascii) {
-            return Uint8Array.from(atob(ascii), c => c.charCodeAt(0));
-        }
 
-        fetch(root + "Dominion-1.0-SNAPSHOT-all.jar")
-            .then(res => res.blob()) // Gets the response and returns it as a blob
-            .then(blob1 => {
-                    var reader = new FileReader();
-                    reader.readAsDataURL(blob1);
-                    reader.onload = function () {
-                        var dataUrl = reader.result;
-                        var base64_jar = dataUrl.split(',')[1];
-                        fetch(root + "Dominion-1.0-SNAPSHOT-all.jar.js")
-                            .then(res => res.blob()) // Gets the response and returns it as a blob
-                            .then(blob2 => {
-                                    var reader = new FileReader();
-                                    reader.readAsDataURL(blob2);
-                                    reader.onload = function () {
-                                        var dataUrl = reader.result;
-                                        var base64_js = dataUrl.split(',')[1];
-                                        fetch(root + "index.html")
-                                            .then(res => res.blob()) // Gets the response and returns it as a blob
-                                            .then(blob => {
-                                                    var reader = new FileReader();
-                                                    reader.readAsDataURL(blob);
-
-                                                    reader.onload = function () {
-                                                        console.log(reader);
-                                                        var dataUrl = reader.result;
-                                                        var base64 = dataUrl.split(',')[1];
-                                                        const fileDetails = [{
-                                                            path: '/index.html',
-                                                            content: u_atob(base64)
-                                                        }, {
-                                                            path: '/Dominion-1.0-SNAPSHOT-all.jar',
-                                                            content: u_atob(base64_jar)
-                                                        }, {
-                                                            path: '/Dominion-1.0-SNAPSHOT-all.jar.js',
-                                                            content: u_atob(base64_js)
-                                                        }];
-                                                        const options = {
-                                                            wrapWithDirectory: true
-                                                        }
-
-                                                        async function f1() {
-                                                            for await (let value of window.node.addAll(fileDetails, options)) {
-                                                                console.log(value.path + " : https://ipfs.io/ipfs/" + value.cid.toString()); // 1, then 2, then 3, then 4, then 5 (with delay between)
-                                                            }
-                                                        }
-
-                                                        f1();
-
-                                                        reader.onerror = function (error) {
-                                                            console.log('Error: ', error);
-                                                        };
-                                                    }
-                                                }
-                                            );
-                                    }
-                                }
-                            );
-                    }
-                }
-            );
+        var urls = [root + "Dominion-1.0-SNAPSHOT-all.jar.js", root + "Dominion-1.0-SNAPSHOT-all.jar", root + '/index.html'];
+        var directory = ["/Dominion-1.0-SNAPSHOT-all.jar.js", "/Dominion-1.0-SNAPSHOT-all.jar", '/index.html'];
+        uploadDirectory(urls, directory);
 
 
         // uploadFile("./Dominion-1.0-SNAPSHOT-all.jar");
