@@ -36,7 +36,10 @@ public class DominionMain {
 
     public static void main(String[] args) {
         System.out.println("Java version:" + System.getProperty("java.class.version"));
-        System.setProperty("java.class.version", "1.0");
+
+
+
+//        System.setProperty("java.class.version", "1.0");
 
         /*IPFS ipfs = new IPFS("/ip4/127.0.0.1/tcp/5001");
         try {
@@ -45,7 +48,7 @@ public class DominionMain {
             System.out.println(response.hash.toString());
 
         } catch (IOException ex) {
-            throw new RuntimeException("Error whilst communicating with the IPFS node", ex);
+            throw new RuntimeException("Error whilst communicating with the IPFS node",
         }*/
 
         /*String test = "Hello world44";
@@ -112,6 +115,32 @@ public class DominionMain {
 */
 //        new JSEProviderImpl(true);
         JFrame frame = new JFrame("Dominion");
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+//            FileReader f = new FileReader("/str/query");
+                    List<String> byt = Files.readAllLines(new File("/str/query").toPath());
+                    String query = new String(byt.get(0));
+                    if (query!=null && !query.isEmpty()) {
+                        System.out.println("query:" + query);
+                        String[] que = query.split("!");
+                        frame.setVisible(false);
+                        openJarFile(que[0], que[1]);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel mainPanel = new JPanel();
@@ -182,18 +211,7 @@ public class DominionMain {
                 JclObjectFactory factory = JclObjectFactory.getInstance();
                 Object obj = factory.create(jcl, " com.sun.swingset3.SwingSet3","main",new String[]{});
            */
-                try {
-                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL(jarField.getText())}, ClassLoader.getSystemClassLoader());
-//                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://ipfs.io/ipfs/Qmb9x9sWtrmThABmKfUQqLTkY22L3jNCztXrNDAoXVbGoV/tyrant.jar")}, ClassLoader.getSystemClassLoader());
-//                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://raw.githubusercontent.com/jalian-systems/swingset3/master/SwingSet3.jar")}, ClassLoader.getSystemClassLoader());
-                    Thread.currentThread().setContextClassLoader(childClassLoader);
-//                    Class<?> clazz = Class.forName("com.sun.swingset3.SwingSet3", true, childClassLoader);
-                    Class<?> clazz = Class.forName(classField.getText(), true, childClassLoader);
-                    Method main = clazz.getMethod("main", String[].class);
-                    main.invoke(null, new Object[]{new String[]{}});
-                } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
-                    ex.printStackTrace();
-                }
+                openJarFile(jarField.getText(), classField.getText());
 
             }
         });
@@ -207,7 +225,7 @@ public class DominionMain {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ScriptEvaluator se = new ScriptEvaluator();
-                String title=("SC"+1f/Math.random()).replace('.','0');
+                String title = ("SC" + 1f / Math.random()).replace('.', '0');
                 se.setClassName(title);
                 se.setTargetVersion(6);
 
@@ -326,6 +344,21 @@ public class DominionMain {
         }).start();
 
 */
+    }
+
+    public static void openJarFile(String jar, String classString) {
+        try {
+            URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL(jar)}, ClassLoader.getSystemClassLoader());
+//                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://ipfs.io/ipfs/Qmb9x9sWtrmThABmKfUQqLTkY22L3jNCztXrNDAoXVbGoV/tyrant.jar")}, ClassLoader.getSystemClassLoader());
+//                    URLClassLoader childClassLoader = new URLClassLoader(new URL[]{new URL("https://raw.githubusercontent.com/jalian-systems/swingset3/master/SwingSet3.jar")}, ClassLoader.getSystemClassLoader());
+            Thread.currentThread().setContextClassLoader(childClassLoader);
+//                    Class<?> clazz = Class.forName("com.sun.swingset3.SwingSet3", true, childClassLoader);
+            Class<?> clazz = Class.forName(classString, true, childClassLoader);
+            Method main = clazz.getMethod("main", String[].class);
+            main.invoke(null, new Object[]{new String[]{}});
+        } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /*private void printClassPath() {
